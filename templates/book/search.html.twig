@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche{% endblock %}
+{% block pageTitle %}Search for a book {% endblock %}
+
+{% block body %}
+    {% include 'nav.html.twig' %}
+    <div class="container-fluid" style="margin-top: 100px">
+    {{ form_start(form) }}
+        <label for="form.category">category:</label>
+        {{ form_widget(form.category) }}
+        <label for="form.price">price:</label>
+        {{ form_widget(form.price)}}
+        <label for="form.StockQuantity">StockQuantity:</label>
+        {{ form_widget(form.StockQuantity) }}
+    {{ form_widget(form.Search) }}
+    {{ form_end(form) }}
+    </div>
+    <div class="container">
+        <h1 id="heading">All Books</h1>
+        <ul id="gallery">
+
+            {% if books|length > 0  %}
+                <div class="alert alert-success">There are {{ books|length }} Books.</div>
+            {% endif %}
+            {% for book in books %}
+
+
+                     <li class="">
+            <a href="{{ path('book_show',{"id": book.id })}}" data-lightbox="projects"
+                                 data-title="{{ book.title }}" data-desc="{{ book.categorie.designation }}">
+                        {% if book.photoFilename %}
+                        <img src="{{ asset('uploads/photos/' ~ book.photoFilename) }}" />
+                  </a>
+                    </li>
+{% endif %}
+
+            {% endfor %}
+
+
+
+        </ul>
+    </div>
+{% endblock %}

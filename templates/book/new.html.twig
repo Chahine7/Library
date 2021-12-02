@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Book{% endblock %}
+
+{% block body %}
+    {% include 'nav.html.twig' %}
+
+    <div class="container" style="{
+         text-align: center;
+    background-size: 100% 100%;
+    color: #fde68a;
+    height: 450px;
+    }">
+        <br><br><br>
+    <h1>Create new Book</h1>
+    <div class="table-responsive">
+    {{ include('book/_form.html.twig') }}
+
+    <a class="btn btn-outline-dark btn-sm" href="{{ path('book_index') }}">back to list</a>
+    </div>
+    </div>
+        {% endblock %}

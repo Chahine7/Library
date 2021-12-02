@@ -1,0 +1,60 @@
+ {% block title %}{% endblock %}
+{#{% block stylesheets %}<link rel="stylesheet" href="{{ asset('css/index.css') }}"> {% endblock %} #}
+{% block body %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{asset("css/bootstrap.min.css")}}">
+    {% endblock %}
+
+        <div class="container-fluid" style="margin-left: 20px;margin-top: 50px">
+            <div class="jumbotron" style="{
+    text-align: center;
+    background-size: 100% 100%;
+    color: #fde68a;
+    height: 450px;
+}">
+    <form method="post" id="">
+        <div class="modal" id="loginModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+        </div>
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+
+
+            <div class="mb-3">
+                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in </h1>
+        <label for="inputUsername">Email</label>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
+        <label for="inputPassword">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" required>
+            <div class="mb-3">
+               <a href="{{ path('app_forgot_password_request') }}">Forgot Password</a>
+            </div>
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
+
+            <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
+        </div>
+
+
+        <button class="btn btn-lg btn-primary" type="submit">
+
+            Sign in
+        </button>
+
+       <a class="btn btn-success btn-lg float-right" style="margin-right: 40px" href="{{ path('app_register') }}">Register</a>
+    </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Borrow{% endblock %}
+
+{% block body %}
+    <br><br><br>
+
+
+    {% include 'nav.html.twig' %}
+    <h1>Borrow</h1>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ borrow.id }}</td>
+            </tr>
+
+            <tr>
+                <th>borrower</th>
+                <td>{{ borrow.users.email }}</td>
+            </tr>
+
+            <tr>
+                <th>BorrowedAt</th>
+                <td>{{ borrow.borrowedAt ? borrow.borrowedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>ReturnedAt</th>
+                <td>{{ borrow.returnedAt ? borrow.returnedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>IsBack</th>
+                <td>{{ borrow.isBack ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+<div class="container-fluid">
+
+
+    <button type="button" class="btn btn-primary" data-target="#myBorrowBack" data-toggle="modal" style="margin-left: 50%">
+                 <span class="glyphicon glyphicon-book">
+            </span>
+        Return Book
+    </button>
+    <div class="modal" id="myBorrowBack" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 id="myModalLabel">
+                        <b> Return your book: </b>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <label for="back">
+                        Book Back:
+                    </label>
+                    {{ form(Book_back) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <a class="btn btn-danger" href="{{ path('borrow_index') }}">back to list</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-success" href="{{ path('borrow_edit', {'id': borrow.id}) }}">edit</a>
+
+        {{ include('borrow/_delete_form.html.twig') }}
+    {% endif %}
+
+{% endblock %}

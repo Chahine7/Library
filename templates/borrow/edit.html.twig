@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Borrow{% endblock %}
+
+{% block body %}
+    {% include 'nav.html.twig' %}
+    <br><br><br>
+    <div class="container-fluid">
+    <h1>Edit Borrow</h1>
+
+    {{ include('borrow/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a class="btn btn-danger" href="{{ path('borrow_index') }}">back to list</a>
+
+
+    {{ include('borrow/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

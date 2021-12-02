@@ -1,0 +1,60 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block content_title %}All Borrows
+    <link rel="stylesheet" href="{{asset("css/bookshow.css")}}">
+    <script src="{{ asset('js/index.js') }}"></script>
+
+{% endblock %}
+   {% block configured_stylesheets %}
+{% endblock %}
+{% block configured_javascripts %}
+{% endblock %}
+{% block page_actions %}
+
+{% endblock %}
+
+{% block main %}
+
+    <div class="container-fluid" style="margin-top: 100px">
+        {{ form_start(form) }}
+        <label for="form.user">user id :</label>
+        {{ form_widget(form.user) }}
+    {#  <label for="form.book">book id :</label>
+        {{ form_widget(form.book)}}
+        #}
+        {{ form_widget(form.Rechercher) }}
+        {{ form_end(form) }}
+    </div>
+    <div id="container">
+        <h1 id="heading">All Borrows</h1>
+        <ul id="gallery">
+            {% if borrows|length == 0  %}
+                <div class="alert alert-danger">There are no  borrows for this user.</div>
+
+            {% endif %}
+            {% if borrows|length > 0  %}
+                <div class="alert alert-success">There are {{ borrows|length }} borrows.</div>
+
+            {% endif %}
+
+            {% for borrow in borrows %}
+
+                <li class="">
+                    <a href="{{ path('borrow_show',{"id": borrow.id })}}"
+                       data-lightbox="projects"
+                       data-title="{{ borrow.books ? borrow.books.title }}"
+                       data-desc="{{  borrow.books ? borrow.books.categorie.designation }}">
+                {% if borrow.books ? borrow.books.photoFilename %}
+
+                <img src="{{ asset('uploads/photos/' ~ borrow.books.photoFilename) }}" />
+                </a>
+                </li>
+            {% endif %}
+
+            {% endfor %}
+
+
+
+        </ul>
+    </div>
+{% endblock %}

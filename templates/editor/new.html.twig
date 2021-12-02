@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Editor{% endblock %}
+
+{% block body %}
+    {% include 'nav.html.twig' %}
+<div class="container" style="{
+         text-align: center;
+    background-size: 100% 100%;
+    color: #fde68a;
+    height: 450px;
+    }">
+    <br><br><br>
+    <h1>Create new Editor</h1>
+
+    {{ include('editor/_form.html.twig') }}
+
+    <a href="{{ path('editor_index') }}">back to list</a>
+</div>
+{% endblock %}
