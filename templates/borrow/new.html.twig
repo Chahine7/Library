@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Borrow{% endblock %}
+
+{% block body %}
+    {% include 'nav.html.twig' %}
+
+    <br><br><br>
+    {% for message in app.flashes('notification') %}
+
+    <div class="alert alert-info alert-dismissible fade show">
+
+        {{ message }}
+
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+    </div>
+    {% endfor %}
+    <div class="container" style="{
+         text-align: center;
+    background-size: 100% 100%;
+    color: #fde68a;
+    height: 450px;
+    }">
+
+
+    <h1>Create new Borrow</h1>
+
+    {{ include('borrow/_form.html.twig') }}
+
+    <a class="btn btn-danger" href="{{ path('borrow_index') }}">back to list</a>
+    </div>
+    {% endblock %}

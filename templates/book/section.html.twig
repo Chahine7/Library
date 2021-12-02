@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book index{% endblock %}
+
+{% block body %}
+    <h1>Book</h1>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-condensed table-bordered">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Isbn</th>
+                <th>Price</th>
+                <th>StockQuantity</th>
+                <th>EditedAt</th>
+                <th>IsAvailable</th>
+                <th>Authors</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.id }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.price }}</td>
+                    <td>{{ book.StockQuantity }}</td>
+                    <td>{{ book.editedAt ? book.editedAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ book.isAvailable ? 'Yes' : 'No' }}</td>
+                    <td>
+
+                        ({{ book.authors|length }}) &nbsp;
+
+                        {% for author in book.authors %}
+                            {{ author.lastname}} {{ author.name}}
+                        {% endfor %}
+
+                    </td>
+                    <td>
+                        <a class="btn btn-success" href="{{ path('book_show', {'id': book.id}) }}">show</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="btn btn-danger" href="{{ path('book_edit', {'id': book.id}) }}">edit</a>
+                        {% endif %}
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-info" href="{{ path('book_new') }}">Create new</a>
+
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Category{% endblock %}
+
+{% block body %}
+    {% include 'nav.html.twig' %}
+<div class="container" style="{
+         text-align: center;
+    background-size: 100% 100%;
+    color: #fde68a;
+    height: 450px;
+    }">
+    <h1>Edit Category</h1>
+
+    {{ include('category/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('category_index') }}">back to list</a>
+
+    {{ include('category/_delete_form.html.twig') }}
+</div>
+{% endblock %}

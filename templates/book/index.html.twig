@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+{% block body %}
+ {% include 'nav.html.twig' %}
+    <body>
+    <header>
+
+    </header>
+
+
+  <br><br>
+    <section>
+        <div class="container">
+            <h1 id="heading">All Books</h1>
+            {% for message in app.flashes("success") %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            <ul id="gallery">
+                {% for book in books %}
+                    {% if book.stockQuantity !=null %}
+                    <li class="" ><a href="{{ path('book_show',{"id": book.id })}}" data-lightbox="projects"
+                                     data-title="{{ book.title }}" data-desc="{{ book.categorie.designation }}">
+                    {% if book.photoFilename %}
+                        <img src="{{ asset('uploads/photos/' ~ book.photoFilename) }}" />
+                        </a>
+                        </li>
+                    {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+
+
+
+
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-info" href="{{ path('book_new') }}">Create new</a>
+
+    {% endif %}
+
+
+    {% endblock %}
+

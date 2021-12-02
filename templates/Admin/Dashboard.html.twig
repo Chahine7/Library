@@ -1,0 +1,67 @@
+{# templates/admin/my-custom-page.html.twig #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_title %}
+    Dashboard
+{% endblock %}
+
+{% block content_title %}Dashboard{% endblock %}
+{% block page_actions %}
+
+    {% endblock %}
+
+{% block main %}
+    <div class="card-group">
+
+        <div class="card">
+            <img src="{{ asset('/img/books.jpg') }}" class="card-img-top">
+            <div class="card-body">
+
+                <h5 class="card-title" style="margin-top: 13px;padding-bottom: 15px">Books</h5>
+                <p class="card-text">Click on the link bellow to access all books.</p>
+                <br>
+                <a class="badge badge-success" href="{{ ea_url().setController('App\\Controller\\Admin\\BookCrudController').setAction('index') }}"> show books </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="{{ asset('/img/category.png') }}" class="card-img-top">
+            <div class="card-body">
+                <br>
+                <br>
+                <h5 class="card-title">Categories</h5>
+                <br>
+                <p class="card-text" style="padding-bottom: 10px">Click on the link bellow to access all categories</p>
+                <a class="badge badge-success" href="{{ ea_url().setController('App\\Controller\\Admin\\CategoryCrudController').setAction('index') }}"> show categories </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="{{ asset('/img/users.png') }}" class="card-img-top">
+            <div class="card-body">
+                <br>
+                <br>
+                <br>
+                <h5 class="card-title">Users</h5>
+                <p class="card-text">Click on the link bellow to access all users.</p>
+                <br>
+                <a class="badge badge-success" href="{{ ea_url().setController('App\\Controller\\Admin\\UserCrudController').setAction('index') }}"> show Users </a>
+            </div>
+        </div>
+
+        <div class="card">
+        <img src="{{ asset('/img/borrow.png') }}" class="card-img-top">
+        <div class="card-body">
+            <br>
+            <br>
+            <br>
+            <h5 class="card-title">Borrows</h5>
+            <p class="card-text">Click on the link bellow to access all Borrows by users.</p>
+            <br>
+            <a href="{{ path('search_borrows') }}" type="button" class="badge badge-success">
+                Borrows
+            </a>
+            <br>
+        </div>
+    </div>
+    </div>
+{% endblock %}

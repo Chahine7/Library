@@ -1,0 +1,14 @@
+{% extends '@email/default/notification/body.html.twig' %}
+{% block content %}
+    Author: {{ borrow.id }}<br />
+    <p>
+
+    </p>
+{% endblock %}
+{% block action %}
+    <spacer size="16"></spacer>
+     <button href="{{ url('home_page', { id: borrow.id })
+    }}">Accept</button>
+    <button href="{{ url('home_page', { id: borrow.id, reject: true })
+    }}">Reject</button>
+{% endblock %}

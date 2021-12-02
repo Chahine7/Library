@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Author index{% endblock %}
+
+{% block body %}
+<br><br><br>
+    <div class="container-fluid">
+    <h1>Author index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Lastname</th>
+                <th>Address</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for author in authors %}
+            <tr>
+                <td>{{ author.id }}</td>
+                <td>{{ author.name }}</td>
+                <td>{{ author.lastname }}</td>
+                <td>{{ author.address }}</td>
+                <td>
+                    <a class="btn btn-success" href="{{ path('author_show', {'id': author.id}) }}">show</a>
+
+                    {% if is_granted("ROLE_ADMIN") %}
+
+                    <a class="btn btn-danger" href="{{ path('author_edit', {'id': author.id}) }}">edit</a>
+                    <a class="btn btn-info" href="{{ path('author_new') }}">Create new</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    </div>
+        {% endblock %}

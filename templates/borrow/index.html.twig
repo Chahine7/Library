@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List of your borrows{% endblock %}
+
+{% block body %}
+    {% include 'nav.html.twig' %}
+<div class="container" style="{
+         text-align: center;
+    background-size: 100% 100%;
+    color: #fde68a;
+    height: 450px;
+    }">
+    <br><br><br>
+    <h1>List of your borrows</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>books</th>
+                <th>BorrowedAt</th>
+                <th>ReturnedAt</th>
+                <th>days left</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for borrow in borrows %}
+            <tr>
+
+                <td>{{ borrow.books }}</td>
+                <td>{{ borrow.borrowedAt ? borrow.borrowedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ borrow.returnedAt ? borrow.returnedAt|date('Y-m-d H:i:s') : '' }}</td>
+<td>{{ borrow.timeleft(borrow.borrowedAt|date('Y-m-d H:i:s') ,borrow.returnedAt|date('Y-m-d H:i:s') ) }}</td>
+                <td>
+                    <a class="btn btn-danger" href="{{ path('borrow_show', {'id': borrow.id}) }}">show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a class="btn btn-success" href="{{ path('borrow_edit', {'id': borrow.id}) }}">edit</a>
+                     {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('borrow_new') }}">Create new</a>
+    {% endif %}
+
+</div>
+{% endblock %}
