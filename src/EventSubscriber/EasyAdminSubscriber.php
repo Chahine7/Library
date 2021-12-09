@@ -2,6 +2,7 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\Book;
 use App\Entity\Borrow;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,6 +33,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             AfterEntityPersistedEvent::class => ['decreaseQuantity'],
             BeforeEntityDeletedEvent::class => ['increaseQuantity'],
             BeforeEntityUpdatedEvent::class => ['updateUser'],
+            BeforeEntityPersistedEvent::class => ['slug'],
 
         ];
     }
@@ -71,6 +73,21 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         );
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
+    }
+
+    public function slug(BeforeEntityPersistedEvent $event)
+    {
+        $entity = $event->getEntityInstance();
+        if(!($entity instanceof Book)){
+            return;
+        }
+        $this->setSlug($entity);
+    }
+    public function setSlug(Book $entity): void
+    {
+     $entity->setSlug($entity->getTitle());
+     $this->entityManager->persist($entity);
+     $this->entityManager->flush();
     }
     public function decreaseQuantity(AfterEntityPersistedEvent $event)
     {
