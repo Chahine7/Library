@@ -37,10 +37,17 @@ class BookController extends AbstractController
 
 
     #[Route('/', name: 'book_index', methods: ['GET'])]
-    public function index(BookRepository $bookRepository): Response
+    public function index(Request $request,BookRepository $bookRepository): Response
     {
+        $book = $this->getDoctrine()->getManager()->getRepository(Book::class)->findAll();
+        $offset=max(0,$request->query->getInt('offset', 0));
+        $paginator=$bookRepository->getBookPaginator($offset);
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findAll(),
+            'books' => $paginator,
+            'previous' => $offset - BookRepository::PAGINATOR_PER_PAGE,
+
+            'next' => min(count($paginator), $offset + BookRepository::PAGINATOR_PER_PAGE),
+
         ]);
     }
     /**
@@ -83,7 +90,7 @@ $book->setPhotoFilename($filename);
             'form' => $form,
         ]);
     }
-    #[Route('/{id}', name: 'book_delete', methods: ['POST'])]
+    #[Route('/{slug}', name: 'book_delete', methods: ['POST'])]
     public function delete(Request $request, Book $book): Response
     {
 
@@ -96,11 +103,12 @@ $book->setPhotoFilename($filename);
         return $this->redirectToRoute('book_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}', name: 'book_show',priority: 1)]
+    #[Route('/{_locale<%app.supported_locales%>}/{slug}', name: 'book_show',priority: 1)]
 
-    public function show(UserRepository $userRepo,Request $request,Book $book,NotifierInterface $notifier)
+    public function show(UserRepository $userRepo,Request $request,Book $book,NotifierInterface $notifier,BookRepository $bookRepository)
 
     {
+
         $borrow = new Borrow();
         $form = $this->createForm(BorrowBookType::class, $borrow);
         $form->handleRequest($request);
@@ -108,10 +116,10 @@ $book->setPhotoFilename($filename);
         {
              $borrow->setUsers($this->getUser());
             $borrow->setBooks($book);
-            $borrow->getBooks()->setStockQuantity($borrow->getBooks()->getStockQuantity()-1);
-            $borrow->setIsBack(false);
-            $entityManager = $this->getDoctrine()->getManager();
+           $entityManager = $this->getDoctrine()->getManager();
             if ($borrow->getReturnedAt()>$borrow->getBorrowedAt()) {
+                $borrow->getBooks()->setStockQuantity($borrow->getBooks()->getStockQuantity()-1);
+                $borrow->setIsBack(false);
                 $notification = (new Notification('new borrow'))
                     ->content('You just borrowed '. $borrow->getBooks($book).' Book!
                     Enjoy Your Read And Please return It before '. $borrow->getReturnedAt()->format("m/d/y") .' Otherwise you will be penalised..!')
@@ -123,7 +131,7 @@ $book->setPhotoFilename($filename);
                 $entityManager->persist($borrow);
                 $entityManager->flush();
                 $this->addFlash('success','Enjoy your read');
-                return $this->redirectToRoute('book_index',['id' => $book->getId()]);
+                return $this->redirectToRoute('book_index',['slug' => $book->getSlug()]);
 
         }else{
                 $this->addFlash('error','Please Check The Returned At Date!');
@@ -135,7 +143,7 @@ $book->setPhotoFilename($filename);
             'Borrow_form' => $form->createView(),
         ]);
     }
-    #[Route('/{id}/edit', name: 'book_edit', methods: ['GET','POST'])]
+    #[Route('/{slug}/edit', name: 'book_edit', methods: ['GET','POST'])]
     public function edit(Request $request, Book $book,BookRepository $bookRepository,string $photoDir): Response
     {
         $form = $this->createForm(BookType::class, $book);
@@ -187,11 +195,14 @@ $book->setPhotoFilename($filename);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $bookPrice = $form->getData()["price"];
+        /*    $bookPrice = $form->getData()["price"];
             $bookCategory = $form->getData()["category"];
             $bookStock = $form->getData()["StockQuantity"];
             //$books = $this->getDoctrine()->getManager()->getRepository(Book::class)->findByCategory(["category" => $bookCategory]);
             $books = $this->getDoctrine()->getManager()->getRepository(Book::class)->findByPrixPage10Trie(["price" => $bookPrice],["StockQuantity" => $bookStock],["categorie" =>$bookCategory]);
+      */
+            $books = $this->getDoctrine()->getRepository(Book::class)->findAllMatching($request->query->get('query'));
+
         }
         return $this->render('book/search.html.twig', [
             'books' => $books,
