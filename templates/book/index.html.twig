@@ -17,7 +17,7 @@
             <ul id="gallery">
                 {% for book in books %}
                     {% if book.stockQuantity !=null %}
-                    <li class="" ><a href="{{ path('book_show',{"id": book.id })}}" data-lightbox="projects"
+                    <li class="" ><a href="{{ path('book_show',{"slug": book.slug })}}" data-lightbox="projects"
                                      data-title="{{ book.title }}" data-desc="{{ book.categorie.designation }}">
                     {% if book.photoFilename %}
                         <img src="{{ asset('uploads/photos/' ~ book.photoFilename) }}" />
@@ -27,9 +27,23 @@
                     {% endif %}
                 {% endfor %}
             </ul>
-        </div>
+            </div>
     </section>
+<div class="text-center">
 
+            {% if previous >= 0 %}
+                <a class="btn btn-danger" href="{{ path('book_index', {offset:
+                    previous }) }}">Previous</a>
+
+            {% endif %}
+
+            {% if next < books|length %}
+
+            <a class="btn btn-info" href="{{ path('book_index', {offset: next
+            }) }}">Next</a>
+
+</div>
+    {% endif %}
 
 
 
